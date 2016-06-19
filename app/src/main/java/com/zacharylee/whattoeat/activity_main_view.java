@@ -1,5 +1,6 @@
 package com.zacharylee.whattoeat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,22 +12,28 @@ import android.view.MenuItem;
 
 public class activity_main_view extends AppCompatActivity {
 
+    private int ADD_NEW = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_activity_main_view);
+        setContentView(R.layout.activity_main_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+       FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addNew);
+        View.OnClickListener handler = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                Intent intent = new Intent(activity_main_view.this,activity_event_detail.class);
+                startActivityForResult(intent,ADD_NEW);
+
             }
-        });
+        };
+        addNew.setOnClickListener(handler);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

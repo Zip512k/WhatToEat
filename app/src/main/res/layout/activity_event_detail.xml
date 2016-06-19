@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="嗯 就是这个样子..."
+            android:id="@+id/detail_title"
+            android:layout_gravity="center_horizontal" />
+
+        <ImageView
+            android:layout_width="112dp"
+            android:layout_height="112dp"
+            android:id="@+id/event_image"
+            android:src="@drawable/default_image"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="268dp"
+        android:id="@+id/detail_list" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/upload_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:backgroundTint="@color/Color_Button_Background"
+        android:tint="@android:color/white"
+        android:src="@android:drawable/ic_menu_upload"
+        android:cropToPadding="false" />
+
+
+</LinearLayout>
