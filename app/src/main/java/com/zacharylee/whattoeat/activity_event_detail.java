@@ -1,5 +1,6 @@
 package com.zacharylee.whattoeat;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -50,7 +51,7 @@ public class activity_event_detail extends AppCompatActivity {
                                     final int position, long id) {
                 switch (position) {
                     case 0:
-                        finish();
+                        showContentChangeDialog();
                         break;
                 }
                 //String main = listView.getSelectedItem().toString();
@@ -66,6 +67,12 @@ public class activity_event_detail extends AppCompatActivity {
             datum.put("content", subItemArray[i]);
             listData.add(datum);
         }
+    }
+
+    public void showContentChangeDialog() {
+        DialogFragment newFragment = new dialog_content_change();
+        newFragment = dialog_content_change.newInstance("change");
+        newFragment.show(this.getFragmentManager(), "change");
     }
 
 }
