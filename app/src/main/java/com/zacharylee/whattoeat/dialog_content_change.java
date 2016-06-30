@@ -15,6 +15,9 @@ import android.widget.TextView;
  */
 public class dialog_content_change extends DialogFragment {
 
+    private View view;
+    private static TextView mChangeContentTextView, mChangeTitleTextView;
+
     public static dialog_content_change newInstance(String type) {
         dialog_content_change frag = new dialog_content_change();
         Bundle args = new Bundle();
@@ -30,21 +33,24 @@ public class dialog_content_change extends DialogFragment {
 
     }
 
+    private void initView(){
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        String type = getArguments().getString("type");
+
+        view = inflater.inflate(R.layout. dialog_change, null);
+        mChangeContentTextView = (TextView) view.findViewById(R.id.changeContent);
+        mChangeTitleTextView = (TextView) view.findViewById(R.id.changeTitle);
+
+        mChangeContentTextView.setHint(type);
+        mChangeTitleTextView.setText(type);
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        String type = getArguments().getString("type");
-
-        View view = inflater.inflate(R.layout. dialog_change, null);
-        final TextView mChangeContentTextView = (TextView) view.findViewById(R.id.changeContent);
-        final TextView mChangeTitleTextView = (TextView) view.findViewById(R.id.changeTitle);
-
-        mChangeContentTextView.setHint(type);
-        mChangeTitleTextView.setText(type);
+        initView();
 
         builder.setView(view);
                 // Add action buttons
@@ -62,5 +68,7 @@ public class dialog_content_change extends DialogFragment {
                 });
         return builder.create();
     }
+
+
 
 }
