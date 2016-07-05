@@ -27,6 +27,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
     private activity_event_detail d_activity;
     private SimpleAdapter adapter;
     private ListView listView;
+    final int MAP_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +62,27 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                         break;
                     case 2:
                         Intent intent = new Intent(activity_event_detail.this, activity_map_fragment.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, MAP_REQUEST);
                 }
                 
             }
         });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch(requestCode){
+            case MAP_REQUEST:
+                if (resultCode == RESULT_OK && data != null) {
+                    subItemArray[2] = data.getStringExtra("position");
+                    updateListView();
+                }
+                break;
+            default:
+                break;
+        }
 
     }
 

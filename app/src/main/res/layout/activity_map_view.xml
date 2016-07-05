@@ -7,11 +7,18 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/positionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="50px"
         android:text="选择位置"
         tools:context=".BasicMapActivity" />
+
+    <Button
+        android:layout_width="168dp"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:id="@+id/mapButton" />
 
     <fragment
         class="com.here.android.mpa.mapping.MapFragment"

@@ -5,15 +5,23 @@ package com.zacharylee.whattoeat;
  */
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.os.Bundle;
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
+import com.here.android.mpa.mapping.MapGesture;
+import com.here.android.mpa.mapping.MapMarker;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,6 +31,10 @@ import java.util.List;
 public class activity_map_fragment extends AppCompatActivity{
 
     private Map map = null;
+    private MapGesture m_mapGesture;
+    private TextView positionText;
+    private Button applyButton;
+    private activity_map_fragment m_activity = this;
 
     private MapFragment mapFragment = null;
 
@@ -33,8 +45,22 @@ public class activity_map_fragment extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
+        positionText = (TextView) findViewById(R.id.positionText);
+        applyButton = (Button) findViewById(R.id.mapButton);
 
         requestPermissions();
+
+        applyButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("position", positionText.getText().toString());
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
+            }
+
+        });
     }
 
     private void requestPermissions(){
@@ -80,18 +106,22 @@ public class activity_map_fragment extends AppCompatActivity{
 
     private void createMap(){
 
-        mapFragment = (MapFragment)getFragmentManager().findFragmentById(
-                R.id.mapfragment);
+        mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.mapfragment);
+
         mapFragment.init(new OnEngineInitListener() {
             @Override
             public void onEngineInitializationCompleted(OnEngineInitListener.Error error)
             {
                 if (error == OnEngineInitListener.Error.NONE) {
+
                     map = mapFragment.getMap();
+                    m_mapGesture = mapFragment.getMapGesture();
                     map.setCenter(new GeoCoordinate(49.196261, -123.004773, 0.0),
                             Map.Animation.NONE);
                     map.setZoomLevel(
                             (map.getMaxZoomLevel() + map.getMinZoomLevel()) / 2);
+                    m_mapGesture.addOnGestureListener(MapOnGestureListener);
+
                 } else {
                     System.out.println("ERROR: Cannot initialize Map Fragment " + error.name());
                 }
@@ -99,4 +129,26 @@ public class activity_map_fragment extends AppCompatActivity{
         });
     }
 
-}
+    private MapGesture.OnGestureListener MapOnGestureListener = new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
+
+        private MapMarker lastMarker = null;
+        @Override
+        public boolean onLongPressEvent(PointF point) {
+
+            MapMarker positionMarker = new MapMarker();
+            if (lastMarker != null) map.removeMapObject(lastMarker);
+            positionMarker.setCoordinate(map.pixelToGeo(point));
+            map.addMapObject(positionMarker);
+            lastMarker = positionMarker;
+
+            Double longitude = new Double (map.pixelToGeo(point).getLongitude());
+            Double latitude = new Double (map.pixelToGeo(point).getLatitude());
+            positionText.setText(latitude.toString() + ", " + longitude.toString());
+            return true;
+
+        }
+
+
+    };
+
+    }
