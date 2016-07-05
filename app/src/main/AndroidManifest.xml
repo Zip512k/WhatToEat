@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -41,6 +42,15 @@
         <activity
             android:name=".activity_event_detail"
             android:label="@string/event_detail"></activity>
+
+        <activity
+            android:name=".activity_map_fragment"
+            android:label="选择位置"></activity>
+
+        <meta-data android:name="com.here.android.maps.appid" android:value="pw3WVAF5KLZWuN08d554"/>
+        <meta-data android:name="com.here.android.maps.apptoken" android:value="RwnP-YgFdOhVRtlqaBUV-Q"/>
+        <meta-data android:name="com.here.android.maps.license.key" android:value="dlefcfq+Vq4x9lSezFEZ8eRqRYaqPZ3vFDrnd2YfxyQgJwYUQcFYG5kQFKC5W9uegmOZNEYGTzn0ctV33CnYA88g/Q/vUQJ88xuqEQUX7U0DbMsO1xeKT8XAPsQoY4gjnm7E5rZlCPl8G5bPABFfvLXUwuF/oNi3l4ospCdVyJcOG7nv0ZMbg1HY8mrCeKmjeYu7/t3Di2VCNo4u9tIEtevqcEmQye40hRz0w8p7Mntf3n4/0Bg8+yqOtNvMSLlqWnJLfjGlxBVBzKp0/fiShInNTL4Bb0hKF4NryS5YoyzXRe73KRa8qrcdGNvQCNmJFeaL/TcE9d3bYjNsqoqRjF1XB02nD9eshi9AyghVTu65A8994HdwRIZgSeNaNO1aOGF5UVy6pIm58b0tgnyyTQElZuoUCQfxAaJjSe4ZeWehGh7o9xUyGTtRCOaKEswuNxjg/17P8QXWYF+2HHXhiN/D+g5LDdypzcHKvodH6V67Qnm71U19GoSZulT2ilMkQNDpSc0ZaBB2c4Wr09vki1UP/zpPRWWIii+NIY0G1bw717Xcu8XSU0VUr/FTOk6sI36AvXCSH3vQIHD6Ce05+q/c8uDzIydIRZu6R46wLxQLUftLqJOJprNulNMKFjTpPqVk8eYZaC/v8iv1IhbsWHW652QbcmAvkgUsb4tAy14="/>
+
     </application>
 
 </manifest>
