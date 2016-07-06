@@ -34,7 +34,6 @@ public class activity_map_fragment extends AppCompatActivity{
     private MapGesture m_mapGesture;
     private TextView positionText;
     private Button applyButton;
-    private activity_map_fragment m_activity = this;
 
     private MapFragment mapFragment = null;
 
