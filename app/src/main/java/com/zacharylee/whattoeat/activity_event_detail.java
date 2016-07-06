@@ -2,6 +2,7 @@ package com.zacharylee.whattoeat;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,6 +27,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
     private activity_event_detail d_activity;
     private SimpleAdapter adapter;
     private ListView listView;
+    final int MAP_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +60,29 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                     case 1:
                         showDatePickerDialog();
                         break;
+                    case 2:
+                        Intent intent = new Intent(activity_event_detail.this, activity_map_fragment.class);
+                        startActivityForResult(intent, MAP_REQUEST);
                 }
                 
             }
         });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch(requestCode){
+            case MAP_REQUEST:
+                if (resultCode == RESULT_OK && data != null) {
+                    subItemArray[2] = data.getStringExtra("position");
+                    updateListView();
+                }
+                break;
+            default:
+                break;
+        }
 
     }
 
