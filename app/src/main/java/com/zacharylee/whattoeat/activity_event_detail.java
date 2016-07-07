@@ -35,7 +35,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
     ArrayList<HashMap<String, String>> listData;
     private String[] titleArray = {"内容","日期","地点","人"}, subItemArray = {"新 添加","新 添加","新 添加","新 添加"};
-    private activity_event_detail d_activity;
+    final List<String> permissionsList = new ArrayList<String>();
     private SimpleAdapter adapter;
     private ListView listView;
     private Uri fileUri;

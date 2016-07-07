@@ -38,7 +38,6 @@ public class activity_map_fragment extends AppCompatActivity{
     private MapFragment mapFragment = null;
 
     final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
-    private activity_map_fragment m_activity = this;
     final List<String> permissionsList = new ArrayList<String>();
     Double oldLong, oldLai;
     MapMarker initMarker = null;
