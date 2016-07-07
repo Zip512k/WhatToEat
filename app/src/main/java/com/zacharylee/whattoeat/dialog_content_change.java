@@ -18,12 +18,13 @@ public class dialog_content_change extends DialogFragment {
 
     private View view;
     private static TextView mChangeContentTextView, mChangeTitleTextView;
-    private String type;
+    private String type, oldContent;
 
-    public static dialog_content_change newInstance(String type) {
+    public static dialog_content_change newInstance(String type, String oldContent) {
         dialog_content_change frag = new dialog_content_change();
         Bundle args = new Bundle();
         args.putString("type", type);
+        args.putString("oldContent", oldContent);
         frag.setArguments(args);
         return frag;
     }
@@ -57,12 +58,14 @@ public class dialog_content_change extends DialogFragment {
     private void initView(){
         LayoutInflater inflater = getActivity().getLayoutInflater();
         type = getArguments().getString("type");
+        oldContent = getArguments().getString("oldContent");
 
         view = inflater.inflate(R.layout. dialog_change, null);
         mChangeContentTextView = (TextView) view.findViewById(R.id.changeContent);
         mChangeTitleTextView = (TextView) view.findViewById(R.id.changeTitle);
 
         mChangeContentTextView.setHint("新 " + type);
+        mChangeContentTextView.setText(oldContent);
         mChangeTitleTextView.setText("修改 " + type);
     }
 

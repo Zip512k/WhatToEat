@@ -14,11 +14,26 @@
         android:text="选择位置"
         tools:context=".BasicMapActivity" />
 
-    <Button
-        android:layout_width="168dp"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="确定"
-        android:id="@+id/mapButton" />
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="198dp"
+            android:layout_height="fill_parent"
+            android:text="确定"
+            android:id="@+id/mapButton" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:id="@+id/cancleButton" />
+
+    </LinearLayout>
 
     <fragment
         class="com.here.android.mpa.mapping.MapFragment"

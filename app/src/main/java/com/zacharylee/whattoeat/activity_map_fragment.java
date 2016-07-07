@@ -33,13 +33,15 @@ public class activity_map_fragment extends AppCompatActivity{
     private Map map = null;
     private MapGesture m_mapGesture;
     private TextView positionText;
-    private Button applyButton;
-    private activity_map_fragment m_activity = this;
+    private Button applyButton, cancelButton;
 
     private MapFragment mapFragment = null;
 
     final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
+    private activity_map_fragment m_activity = this;
     final List<String> permissionsList = new ArrayList<String>();
+    Double oldLong, oldLai;
+    MapMarker initMarker = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class activity_map_fragment extends AppCompatActivity{
         setContentView(R.layout.activity_map_view);
         positionText = (TextView) findViewById(R.id.positionText);
         applyButton = (Button) findViewById(R.id.mapButton);
+        cancelButton = (Button) findViewById(R.id.cancleButton);
 
         requestPermissions();
 
@@ -57,6 +60,15 @@ public class activity_map_fragment extends AppCompatActivity{
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("position", positionText.getText().toString());
                 setResult(Activity.RESULT_OK,returnIntent);
+                finish();
+            }
+
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
                 finish();
             }
 
@@ -92,6 +104,7 @@ public class activity_map_fragment extends AppCompatActivity{
                         && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED) {
 
+                    getOldPosition();
                     createMap();
                 } else {
 
@@ -102,6 +115,20 @@ public class activity_map_fragment extends AppCompatActivity{
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    private void getOldPosition(){
+        Intent intent = getIntent();
+        String oldPosition = intent.getStringExtra("oldPosition");
+        if (oldPosition != null){
+            String[] data = oldPosition.split(",");
+            if (data.length == 2) {
+                positionText.setText(oldPosition);
+                oldLai = Double.parseDouble(data[0]);
+                oldLong = Double.parseDouble(data[1]);
+            }
+        }
+
     }
 
     private void createMap(){
@@ -120,6 +147,14 @@ public class activity_map_fragment extends AppCompatActivity{
                             Map.Animation.NONE);
                     map.setZoomLevel(
                             (map.getMaxZoomLevel() + map.getMinZoomLevel()) / 2);
+
+                    if (oldLai != null && oldLong != null) {
+                        initMarker = new MapMarker();
+                        initMarker.setCoordinate(new GeoCoordinate(oldLai, oldLong));
+                        initMarker.setTitle("Old Position");
+                        map.addMapObject(initMarker);
+                    }
+
                     m_mapGesture.addOnGestureListener(MapOnGestureListener);
 
                 } else {
@@ -138,12 +173,13 @@ public class activity_map_fragment extends AppCompatActivity{
             MapMarker positionMarker = new MapMarker();
             if (lastMarker != null) map.removeMapObject(lastMarker);
             positionMarker.setCoordinate(map.pixelToGeo(point));
+            positionMarker.setTitle("New Position");
             map.addMapObject(positionMarker);
             lastMarker = positionMarker;
 
             Double longitude = new Double (map.pixelToGeo(point).getLongitude());
             Double latitude = new Double (map.pixelToGeo(point).getLatitude());
-            positionText.setText(latitude.toString() + ", " + longitude.toString());
+            positionText.setText(latitude.toString() + "," + longitude.toString());
             return true;
 
         }

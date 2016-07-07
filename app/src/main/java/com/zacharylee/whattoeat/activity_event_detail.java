@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class activity_event_detail extends AppCompatActivity implements dialog_content_change.contentChangedListener {
 
     ArrayList<HashMap<String, String>> listData;
-    private String[] titleArray = {"内容","日期","地点","人"}, subItemArray = {"添加","添加","添加","添加"};
+    private String[] titleArray = {"内容","日期","地点","人"}, subItemArray = {"新 添加","新 添加","新 添加","新 添加"};
     private activity_event_detail d_activity;
     private SimpleAdapter adapter;
     private ListView listView;
@@ -55,13 +55,14 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                 switch (position) {
                     case 0:
                     case 3:
-                        showContentChangeDialog(titleArray[position]);
+                        showContentChangeDialog(titleArray[position], subItemArray[position]);
                         break;
                     case 1:
                         showDatePickerDialog();
                         break;
                     case 2:
                         Intent intent = new Intent(activity_event_detail.this, activity_map_fragment.class);
+                        intent.putExtra("oldPosition", subItemArray[position]);
                         startActivityForResult(intent, MAP_REQUEST);
                 }
                 
@@ -121,9 +122,9 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
     }
 
-    private void showContentChangeDialog(String type) {
+    private void showContentChangeDialog(String type, String oldContent) {
         DialogFragment newFragment = new dialog_content_change();
-        newFragment = dialog_content_change.newInstance(type);
+        newFragment = dialog_content_change.newInstance(type, oldContent);
         newFragment.show(this.getFragmentManager(), "change_content");
     }
 
