@@ -5,12 +5,16 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -21,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,14 +44,17 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
     private SimpleAdapter adapter;
     private ListView listView;
     private Uri fileUri;
+    String fileName = "";
     final int MAP_REQUEST = 10, IMAGE_REQUEST = 20, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
-    static int MEDIA_TYPE_IMAGE = 1, MEDIA_TYPE_VIDEO = 2;
     ImageView eventImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         TextView title = (TextView) findViewById(R.id.detail_title);
         eventImage = (ImageView) findViewById(R.id.event_image);
@@ -57,17 +65,49 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_activity_main_view, menu);
+        return true;
+    }
+
+    private void loadLocalImage() {
+        File imgFile = new  File(fileName);
+
+        if(imgFile.exists()){
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            eventImage.setImageBitmap(myBitmap);
+
+        }
+    }
+
+    private View.OnLongClickListener imageLongClickListener = new View.OnLongClickListener(){
+        @Override
+        public boolean onLongClick(View v) {
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            try {
+                fileUri = Uri.fromFile(createImageFile());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+            startActivityForResult(intent, IMAGE_REQUEST);
+
+            return true;
+        }
+    };
+
     private View.OnClickListener imageClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            fileUri = Uri.fromFile(getOutputMediaFile(MEDIA_TYPE_IMAGE));
-            File f = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-            startActivityForResult(intent, IMAGE_REQUEST);
+            Intent intent = new Intent(activity_event_detail.this, activity_view_image.class);
+            intent.putExtra("url",fileName);
+            startActivity(intent);
 
         }
     };
@@ -113,10 +153,9 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                 }
                 break;
             case IMAGE_REQUEST:
-                if (resultCode == RESULT_OK && data != null) {
-                    Toast.makeText(this, "Image saved to:\n" + data.getData(), Toast.LENGTH_SHORT).show();
+                if (resultCode == RESULT_OK){
+                    loadLocalImage();
                 }
-                break;
             default:
                 break;
         }
@@ -210,6 +249,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                 if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
+                    eventImage.setOnLongClickListener(imageLongClickListener);
                     eventImage.setOnClickListener(imageClickListener);
                 } else {
 
@@ -222,30 +262,17 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
         }
     }
 
-    private static File getOutputMediaFile(int type){
-
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "eatapp");
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                System.out.println("Eatapp failed to create directory");
-                return null;
-            }
-        }
-
+    private File createImageFile() throws IOException {
+        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
-        } else {
-            return null;
-        }
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
-        return mediaFile;
+        // Save a file: path for use with ACTION_VIEW intents
+        fileName =  image.getAbsolutePath();
+        return image;
     }
 
 }

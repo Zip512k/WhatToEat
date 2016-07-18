@@ -48,6 +48,7 @@
         <activity
             android:name=".activity_map_fragment"
             android:label="选择位置"></activity>
+        <activity android:name=".activity_view_image"/>
 
         <meta-data android:name="com.here.android.maps.appid" android:value="pw3WVAF5KLZWuN08d554"/>
         <meta-data android:name="com.here.android.maps.apptoken" android:value="RwnP-YgFdOhVRtlqaBUV-Q"/>
