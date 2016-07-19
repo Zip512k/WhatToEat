@@ -42,11 +42,13 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
     ArrayList<HashMap<String, String>> listData;
     private String[] titleArray = {"内容","日期","地点","人"}, subItemArray = {"新 添加","新 添加","新 添加","新 添加"};
+    String[] tempSubArray;
     final List<String> permissionsList = new ArrayList<String>();
     private SimpleAdapter adapter;
     private ListView listView;
     private Uri fileUri;
-    String fileName = "";
+    private String fileName = "";
+    String tempFileArray;
     final int MAP_REQUEST = 10, IMAGE_REQUEST = 20, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
     ImageView eventImage;
 
@@ -58,10 +60,19 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
         TextView title = (TextView) findViewById(R.id.detail_title);
         eventImage = (ImageView) findViewById(R.id.event_image);
 
+        getOldContent();
         setListView();
-
+        loadLocalImage();
         requestPermissions();
 
+    }
+
+    private void getOldContent(){
+        Intent intent = getIntent();
+        String[] tempSubArray = intent.getStringArrayExtra("content");
+        String tempFileArray = intent.getStringExtra("photoUrl");
+        if (tempSubArray != null) subItemArray = tempSubArray;
+        if (tempFileArray != null) fileName = tempFileArray;
     }
 
     @Override

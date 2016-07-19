@@ -8,10 +8,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class activity_main_view extends AppCompatActivity {
 
-    private final int ADD_NEW = 1;
+    private final int ADD_NEW = 1, AMEND_DETAIL = 2;
+    private String[] contentArray = new String[1000], statusArray = new String[1000], fileArray = new String[1000];
+    private String[][] content = new String[1000][4];
+    private String[] tempSubArray;
+    private String tempFileArray;
+    private SimpleAdapter adapter;
+    private ListView listView;
+    private int count = 0;
+
+    ArrayList<HashMap<String, String>> listData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +46,50 @@ public class activity_main_view extends AppCompatActivity {
             }
         };
         addNew.setOnClickListener(handler);
+
+        setListView();
     }
 
+    private void setListView() {
+        listView = (ListView) findViewById(R.id.listView);
+        listData = new ArrayList<HashMap<String, String>>();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
+            {
+                Intent intent = new Intent(activity_main_view.this, activity_event_detail.class);
+                intent.putExtra("content",content[position]);
+                intent.putExtra("photoUrl",fileArray[position]);
+                startActivityForResult(intent,AMEND_DETAIL);
+            }
+
+        });
+
+        initListView();
+    }
+
+    private void initListView() {
+        for (int i = 0; i < count; i++) {
+            HashMap<String, String> datum = new HashMap<String, String>();
+            datum.put("content", contentArray[i]);
+            datum.put("status", statusArray[i]);
+            listData.add(datum);
+        }
+        adapter = new SimpleAdapter(this, listData, android.R.layout.simple_list_item_2,
+                new String[]{"content", "status"}, new int[]{android.R.id.text1, android.R.id.text2});
+        listView.setAdapter(adapter);
+    }
+
+    private void updateListView(){
+
+        if (adapter != null) adapter.notifyDataSetChanged();
+        adapter = new SimpleAdapter(this, listData, android.R.layout.simple_list_item_2,
+                new String[]{"content", "status"}, new int[]{android.R.id.text1, android.R.id.text2});
+        listView.setAdapter(adapter);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,6 +104,18 @@ public class activity_main_view extends AppCompatActivity {
         switch(requestCode){
             case ADD_NEW:
                 if (resultCode == RESULT_OK && data != null) {
+                    tempSubArray = data.getStringArrayExtra("content");
+                    tempFileArray = data.getStringExtra("thumbnail");
+                    content[count] = tempSubArray;
+                    contentArray[count] = tempSubArray[0];
+                    statusArray[count] = "未完成";
+                    fileArray[count] = tempFileArray;
+                    HashMap<String, String> datum = new HashMap<String, String>();
+                    datum.put("content", contentArray[count]);
+                    datum.put("status", statusArray[count]);
+                    listData.add(datum);
+                    updateListView();
+                    count++;
                 }
                 break;
             default:
