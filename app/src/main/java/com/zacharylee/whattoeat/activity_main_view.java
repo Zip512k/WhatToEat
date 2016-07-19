@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 public class activity_main_view extends AppCompatActivity {
 
-    private int ADD_NEW = 1;
+    private final int ADD_NEW = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,20 @@ public class activity_main_view extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_activity_main_view, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch(requestCode){
+            case ADD_NEW:
+                if (resultCode == RESULT_OK && data != null) {
+                }
+                break;
+            default:
+                break;
+        }
+
     }
 
     @Override

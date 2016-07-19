@@ -1,6 +1,7 @@
 package com.zacharylee.whattoeat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -53,9 +55,6 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         TextView title = (TextView) findViewById(R.id.detail_title);
         eventImage = (ImageView) findViewById(R.id.event_image);
 
@@ -67,8 +66,23 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_activity_main_view, menu);
+        getMenuInflater().inflate(R.menu.menu_activity_done, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_menu_done:
+                Intent intent = new Intent();
+                intent.putExtra("content",subItemArray);
+                intent.putExtra("thumbnail",fileName);
+                setResult(Activity.RESULT_OK,intent);
+                finish();
+                break;
+
+        }
+
         return true;
     }
 
