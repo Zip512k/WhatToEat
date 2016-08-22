@@ -42,15 +42,14 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
     ArrayList<HashMap<String, String>> listData;
     private String[] titleArray = {"内容","日期","地点","人"}, subItemArray = {"新 添加","新 添加","新 添加","新 添加"};
-    String[] tempSubArray;
     final List<String> permissionsList = new ArrayList<String>();
     private SimpleAdapter adapter;
     private ListView listView;
     private Uri fileUri;
     private String fileName = "";
-    String tempFileArray;
     final int MAP_REQUEST = 10, IMAGE_REQUEST = 20, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
     ImageView eventImage;
+    int tempPostition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +70,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
         Intent intent = getIntent();
         String[] tempSubArray = intent.getStringArrayExtra("content");
         String tempFileArray = intent.getStringExtra("photoUrl");
+        tempPostition = intent.getIntExtra("position", -1);
         if (tempSubArray != null) subItemArray = tempSubArray;
         if (tempFileArray != null) fileName = tempFileArray;
     }
@@ -88,6 +88,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                 Intent intent = new Intent();
                 intent.putExtra("content",subItemArray);
                 intent.putExtra("thumbnail",fileName);
+                if (tempPostition != -1) intent.putExtra("position", tempPostition);
                 setResult(Activity.RESULT_OK,intent);
                 finish();
                 break;

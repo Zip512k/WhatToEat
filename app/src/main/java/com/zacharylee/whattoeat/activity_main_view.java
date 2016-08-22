@@ -25,6 +25,7 @@ public class activity_main_view extends AppCompatActivity {
     private SimpleAdapter adapter;
     private ListView listView;
     private int count = 0;
+    int tempPosition;
 
     ArrayList<HashMap<String, String>> listData;
 
@@ -62,6 +63,7 @@ public class activity_main_view extends AppCompatActivity {
                 Intent intent = new Intent(activity_main_view.this, activity_event_detail.class);
                 intent.putExtra("content",content[position]);
                 intent.putExtra("photoUrl",fileArray[position]);
+                intent.putExtra("position",position);
                 startActivityForResult(intent,AMEND_DETAIL);
             }
 
@@ -118,6 +120,19 @@ public class activity_main_view extends AppCompatActivity {
                     count++;
                 }
                 break;
+            case AMEND_DETAIL:
+                if (resultCode == RESULT_OK && data != null) {
+                    tempSubArray = data.getStringArrayExtra("content");
+                    tempFileArray = data.getStringExtra("thumbnail");
+                    tempPosition = data.getIntExtra("position", -1);
+                    if (tempPosition != -1) {
+                        content[tempPosition] = tempSubArray;
+                        contentArray[tempPosition] = tempSubArray[0];
+                        fileArray[tempPosition] = tempFileArray;
+                    }
+                    listData.get(tempPosition).put("content", contentArray[tempPosition]);
+                    updateListView();
+                }
             default:
                 break;
         }
