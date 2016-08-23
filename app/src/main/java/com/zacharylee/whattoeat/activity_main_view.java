@@ -120,6 +120,8 @@ public class activity_main_view extends AppCompatActivity {
                     count++;
                 }
                 break;
+
+
             case AMEND_DETAIL:
                 if (resultCode == RESULT_OK && data != null) {
                     tempSubArray = data.getStringArrayExtra("content");
@@ -133,6 +135,7 @@ public class activity_main_view extends AppCompatActivity {
                     listData.get(tempPosition).put("content", contentArray[tempPosition]);
                     updateListView();
                 }
+                break;
             default:
                 break;
         }

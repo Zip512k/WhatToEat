@@ -38,11 +38,13 @@
         android:id="@+id/upload_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         app:backgroundTint="@color/Color_Button_Background"
         android:tint="@android:color/white"
         android:src="@android:drawable/ic_menu_upload"
-        android:cropToPadding="false" />
+        android:cropToPadding="false"
+        android:layout_gravity="center_horizontal" />
+
+
 
 
 </LinearLayout>

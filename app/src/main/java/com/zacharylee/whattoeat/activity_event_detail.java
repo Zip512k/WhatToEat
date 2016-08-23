@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
@@ -49,7 +51,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
     private String fileName = "";
     final int MAP_REQUEST = 10, IMAGE_REQUEST = 20, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
     ImageView eventImage;
-    int tempPostition;
+    int tempPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +60,20 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
         TextView title = (TextView) findViewById(R.id.detail_title);
         eventImage = (ImageView) findViewById(R.id.event_image);
+        FloatingActionButton uploadPhoto = (FloatingActionButton) findViewById(R.id.upload_photo);
 
         getOldContent();
         setListView();
         loadLocalImage();
         requestPermissions();
+        View.OnClickListener handler = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        };
+        uploadPhoto.setOnClickListener(handler);
 
     }
 
@@ -70,7 +81,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
         Intent intent = getIntent();
         String[] tempSubArray = intent.getStringArrayExtra("content");
         String tempFileArray = intent.getStringExtra("photoUrl");
-        tempPostition = intent.getIntExtra("position", -1);
+        tempPosition = intent.getIntExtra("position", -1);
         if (tempSubArray != null) subItemArray = tempSubArray;
         if (tempFileArray != null) fileName = tempFileArray;
     }
@@ -88,7 +99,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
                 Intent intent = new Intent();
                 intent.putExtra("content",subItemArray);
                 intent.putExtra("thumbnail",fileName);
-                if (tempPostition != -1) intent.putExtra("position", tempPostition);
+                if (tempPosition != -1) intent.putExtra("position", tempPosition);
                 setResult(Activity.RESULT_OK,intent);
                 finish();
                 break;
