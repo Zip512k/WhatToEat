@@ -49,7 +49,7 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
     private ListView listView;
     private Uri fileUri;
     private String fileName = "";
-    final int MAP_REQUEST = 10, IMAGE_REQUEST = 20, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
+    final int MAP_REQUEST = 10, IMAGE_REQUEST = 20, PHOTOS_VIEW = 30, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 0;
     ImageView eventImage;
     int tempPosition;
 
@@ -70,6 +70,9 @@ public class activity_event_detail extends AppCompatActivity implements dialog_c
 
             @Override
             public void onClick(View view) {
+
+                Intent i = new Intent(activity_event_detail.this, activity_photos_view.class);
+                startActivityForResult(i, PHOTOS_VIEW);
 
             }
         };
