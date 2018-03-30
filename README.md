@@ -1,3 +1,3 @@
 # WhatToEat
 
-This is an Andriod app providing good place for meal. 
+This is a restaurant finding app in Android Version. The app builds up in java and includes map, rank serveice. 
